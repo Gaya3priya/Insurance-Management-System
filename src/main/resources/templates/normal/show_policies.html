@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/base::Layout(~{::section})">
+<head>
+     <meta charset="UTF-8"/>
+     <title>This is home page</title>
+</head>
+<body>
+      <section>
+        <div class="card mx-3">
+
+			<div class="card-body">
+				<h1 class="text-center">View Policies</h1>
+				<div class="divider"></div>
+				<!--Search-->
+				<div class="search-container my-3">
+					<input onKeyup="search()" id="search-input" type="text" class="form-control" placeholder="Search your Policies.."/>
+				
+					<div class="search-result" style="margin-left: 75px;">
+						<!--Search result goes here-->
+						<h1>This is result</h1>
+					</div>
+				</div>
+				<div class="table-responsive">
+				<table class="table table-hover" id="table">
+                   <thead class="table-dark">
+                    <tr>
+                    
+                    <th scope="col">PolicyID</th>
+                    <th scope="col">Name</th>
+					<th scope="col">Premium</th>
+					<th scope="col">FUP(yyyy-mm-dd)</th>
+					<th scope="col">Action</th>
+					
+                    </tr>
+                   </thead>
+                   <tbody> 
+                    <tr th:each="p:${policies}">
+					 
+
+                      <td>
+						  <a href="#" th:href="@{'/user/'+${p.pId}+'/policy'}">
+							  <span th:text="${p.policyID}">Mark</span>
+						  </a>
+					  </td>
+
+					 <td th:text="${p.name}">Mark</td>
+                     <td th:text="${p.premium}">Otto</td>
+					 <td th:text="${p.FUP}">@mdo</td>
+					 
+					 <td>
+						 <a href="#" th:onclick="|deletePolicy(${p.pId})|" class="btn btn-danger btn-sm">Delete</a>
+						 <form method="POST" th:action="@{'/user/update-policy/'+${p.pId}}" class="mt-2">
+						 <button type="submit" class="btn btn-success btn-sm">Update</button>
+						 </form>
+					 </td>
+                    </tr>
+                    
+                   </tbody>
+				</table>
+				</div>
+				<!--Pagination part-->
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li th:if="${currentPage != 0}" class="page-item"><a th:href="@{'/user/show-policies/'+${currentPage-1}}" class="page-link" href="#">Previous</a></li>
+						<li th:classappend="${currentPage==i-1?'active':''}" th:each="i :${#numbers.sequence(1,totalPages)}" class="page-item"><a th:href="@{'/user/show-policies/'+${i-1}}" class="page-link" href="#"><span th:text="${i}"></span></a></li>
+						<li th:if="${currentPage+1 != totalPages}" class="page-item"><a th:href="@{'/user/show-policies/'+${currentPage+1}}" class="page-link" href="#">Next</a></li>
+					</ul>
+				</nav>
+				<div class="container text-center" >
+				  <a th:href="@{/user/export}" class="btn btn-primary">Export to PDF</a>
+				</div>
+			</div>
+
+		</div>
+		<script>
+         $(document).ready(()=>{
+              $('.item').removeClass('active');
+              $('#viewPolicies-link').addClass('active');
+          });
+          
+		</script>
+	        
+      </section>
+</body>
+</html>
